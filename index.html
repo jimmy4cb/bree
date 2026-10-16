@@ -88,6 +88,13 @@
       color: var(--muted);
     }
 
+    .privacy-note {
+      max-width: 48ch;
+      margin: -1.2rem auto 1.5rem;
+      color: var(--muted);
+      font: 0.82rem/1.5 "Avenir Next", "Segoe UI", sans-serif;
+    }
+
     .actions {
       display: flex;
       flex-wrap: wrap;
@@ -232,6 +239,65 @@
       margin-bottom: 0.75rem;
     }
 
+    .activity-section {
+      margin-top: 2.5rem;
+      padding-top: 1.4rem;
+      border-top: 1px solid var(--line);
+      text-align: left;
+    }
+
+    .activity-heading {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .activity-heading h2 {
+      margin: 0;
+      color: var(--rose);
+      font-size: 1.45rem;
+      font-weight: 400;
+    }
+
+    .activity-heading button {
+      min-height: 2.5rem;
+      padding: 0.5rem 0.85rem;
+      font-size: 0.85rem;
+    }
+
+    .activity-status {
+      min-height: 1.5em;
+      margin: 0.8rem 0;
+      color: var(--muted);
+      font: 0.84rem/1.4 "Avenir Next", "Segoe UI", sans-serif;
+    }
+
+    .activity-list {
+      max-height: min(48vh, 28rem);
+      margin: 0;
+      padding: 0;
+      overflow: auto;
+      list-style: none;
+    }
+
+    .activity-list li {
+      display: grid;
+      grid-template-columns: minmax(9rem, 1fr) minmax(9rem, 1.1fr) minmax(8rem, 1fr);
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+      border-top: 1px solid rgb(98 64 75 / 45%);
+      color: var(--ink);
+      font: 0.8rem/1.45 "Avenir Next", "Segoe UI", sans-serif;
+      overflow-wrap: anywhere;
+    }
+
+    .activity-list time,
+    .activity-user {
+      color: var(--muted);
+    }
+
     .retry-actions {
       margin-top: 1rem;
     }
@@ -372,6 +438,11 @@
       .call-form button {
         width: 100%;
       }
+
+      .activity-list li {
+        grid-template-columns: 1fr;
+        gap: 0.2rem;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -418,10 +489,11 @@
     <p class="eyebrow">A note for Bree</p>
     <h1 id="gate-title">There’s something I’d like you to read.</h1>
     <p class="sub">Would you be open to reading a note from me?</p>
+    <p class="privacy-note">Your choices and key actions are recorded for the administrator.</p>
 
     <div id="initial-actions" class="actions">
-      <button id="accept" class="primary" type="button">Yes, I’ll read it</button>
-      <button id="decline" class="secondary" type="button">No, not right now</button>
+      <button id="accept" class="primary" type="button" data-activity="consent_accepted">Yes, I’ll read it</button>
+      <button id="decline" class="secondary" type="button" data-activity="consent_declined">No, not right now</button>
     </div>
     <p id="gate-status" class="status" role="status" aria-live="polite"></p>
     <div class="account-tools">
@@ -429,8 +501,8 @@
       <button id="user-signout" class="secondary" type="button">Sign out</button>
     </div>
     <div id="retry-actions" class="actions retry-actions" hidden>
-      <button id="retry" class="primary" type="button">Try again</button>
-      <button id="not-now" class="secondary" type="button">Not now</button>
+      <button id="retry" class="primary" type="button" data-activity="retry_clicked">Try again</button>
+      <button id="not-now" class="secondary" type="button" data-activity="not_now_clicked">Not now</button>
     </div>
   </section>
 
@@ -456,7 +528,7 @@
         <label for="call-time">Time
           <input id="call-time" name="time" type="time" required>
         </label>
-        <button class="primary" type="submit">Add to calendar</button>
+        <button class="primary" type="submit" data-activity="calendar_add_clicked">Add to calendar</button>
       </form>
       <p id="calendar-status" class="calendar-status" role="status" aria-live="polite"></p>
     </section>
@@ -473,6 +545,14 @@
     <p id="admin-identity" class="sub"></p>
     <p class="sub">This account has administrator access.</p>
     <button id="admin-signout" class="secondary" type="button">Sign out</button>
+    <section class="activity-section" aria-labelledby="activity-heading">
+      <div class="activity-heading">
+        <h2 id="activity-heading">Recent activity</h2>
+        <button id="refresh-activity" class="secondary" type="button" data-activity="activity_refresh_clicked">Refresh</button>
+      </div>
+      <p id="activity-status" class="activity-status" role="status" aria-live="polite"></p>
+      <ol id="activity-list" class="activity-list"></ol>
+    </section>
   </section>
   </main>
 
@@ -496,15 +576,31 @@
     const retryActions = document.querySelector("#retry-actions");
     const gateStatus = document.querySelector("#gate-status");
     const notificationEndpoint = "";
-    const supabaseUrl = "";
-    const supabasePublishableKey = "";
+    const supabaseUrl = "https://zpbmoghnpykbnitxeuju.supabase.co";
+    const supabasePublishableKey = "sb_publishable_jg4uzeb1EP1bRpseSiYC7g_EZPvtxYc";
     let isAdminRoute = window.location.hash === "#admin";
     let authMode = "signin";
     let supabaseClient = null;
+    let currentUserId = null;
     const callForm = document.querySelector("#call-form");
     const callDate = document.querySelector("#call-date");
     const callTime = document.querySelector("#call-time");
     const calendarStatus = document.querySelector("#calendar-status");
+    const activityStatus = document.querySelector("#activity-status");
+    const activityList = document.querySelector("#activity-list");
+
+    const activityLabels = {
+      consent_accepted: "Accepted the note",
+      consent_declined: "Declined the note",
+      retry_clicked: "Chose try again",
+      not_now_clicked: "Chose not now",
+      calendar_add_clicked: "Clicked add to calendar",
+      calendar_reminder_created: "Created a calendar reminder",
+      activity_refresh_clicked: "Refreshed activity records",
+      signed_in: "Signed in",
+      account_created: "Created an account",
+      signed_out: "Signed out"
+    };
 
     async function notifyResponse(response) {
       if (!notificationEndpoint) {
@@ -521,6 +617,74 @@
         if (!result.ok) throw new Error(`Notification endpoint returned ${result.status}`);
       } catch (error) {
         console.error("Could not send the response notification.", error);
+      }
+    }
+
+    async function activityRequest(method, body) {
+      const { data, error } = await supabaseClient.auth.getSession();
+      if (error || !data.session) throw new Error("Sign in to access activity.");
+
+      const response = await fetch(`${supabaseUrl}/functions/v1/activity`, {
+        method,
+        headers: {
+          apikey: supabasePublishableKey,
+          Authorization: `Bearer ${data.session.access_token}`,
+          ...(body ? { "Content-Type": "application/json" } : {})
+        },
+        ...(body ? { body: JSON.stringify(body) } : {})
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Activity request failed.");
+      return result;
+    }
+
+    async function recordActivity(action) {
+      if (!supabaseClient || !currentUserId || !activityLabels[action]) return;
+
+      try {
+        await activityRequest("POST", { event: action });
+      } catch (error) {
+        console.error("Could not record activity.", error);
+      }
+    }
+
+    document.addEventListener("click", (event) => {
+      if (!(event.target instanceof Element)) return;
+      const control = event.target.closest("[data-activity]");
+      if (control) void recordActivity(control.dataset.activity);
+    });
+
+    async function loadActivity() {
+      activityStatus.textContent = "Loading activity...";
+      activityList.replaceChildren();
+
+      let events;
+      try {
+        ({ events } = await activityRequest("GET"));
+      } catch (error) {
+        console.error("Could not load activity.", error);
+        activityStatus.textContent = "Could not load activity. Check the Supabase setup.";
+        return;
+      }
+
+      activityStatus.textContent = events.length ? `${events.length} recent actions` : "No activity recorded yet.";
+      for (const entry of events) {
+        const item = document.createElement("li");
+        const time = document.createElement("time");
+        const action = document.createElement("span");
+        const user = document.createElement("span");
+
+        time.dateTime = entry.created_at;
+        time.textContent = new Intl.DateTimeFormat(undefined, {
+          dateStyle: "medium",
+          timeStyle: "short"
+        }).format(new Date(entry.created_at));
+        action.textContent = activityLabels[entry.event] || "Recorded activity";
+        user.className = "activity-user";
+        user.textContent = `User ${entry.user_id.slice(0, 8)}`;
+        user.title = entry.user_id;
+        item.append(time, action, user);
+        activityList.append(item);
       }
     }
 
@@ -555,6 +719,7 @@
     }
 
     async function showSession(session) {
+      currentUserId = session.user.id;
       authScreen.hidden = true;
       gate.hidden = true;
       letterScreen.hidden = true;
@@ -575,6 +740,7 @@
 
         document.querySelector("#admin-identity").textContent = `Signed in as ${session.user.email}.`;
         adminScreen.hidden = false;
+        await loadActivity();
         return;
       }
 
@@ -631,11 +797,13 @@
 
     async function signOut() {
       if (!supabaseClient) return;
+      await recordActivity("signed_out");
       const { error } = await supabaseClient.auth.signOut();
       if (error) {
         authStatus.textContent = "Sign out failed. Please try again.";
         return;
       }
+      currentUserId = null;
       showAuth("You are signed out.");
     }
 
@@ -667,6 +835,8 @@
           const { data, error } = await supabaseClient.auth.signInWithPassword(credentials);
           if (error) throw error;
           await showSession(data.session);
+          await recordActivity("signed_in");
+          await recordActivity("signed_in");
         }
       } catch (error) {
         authStatus.textContent = error.message || "Sign-in failed. Please try again.";
@@ -679,6 +849,10 @@
     document.querySelector("#user-signout").addEventListener("click", signOut);
     document.querySelector("#letter-signout").addEventListener("click", signOut);
     document.querySelector("#admin-signout").addEventListener("click", signOut);
+    document.querySelector("#refresh-activity").addEventListener("click", async () => {
+      await recordActivity("activity_refresh_clicked");
+      await loadActivity();
+    });
 
     function localDateValue(date) {
       const year = date.getFullYear();
@@ -766,6 +940,7 @@
       download.remove();
       window.setTimeout(() => URL.revokeObjectURL(url), 1000);
       calendarStatus.textContent = "Calendar reminder ready. Please confirm the time with Cliff.";
+      void recordActivity("calendar_reminder_created");
     });
 
     initializeAuth();
