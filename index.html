@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#171319">
-  <title>A note for Bree</title>
+  <title>A note for Britney</title>
   <style>
     :root {
       color-scheme: dark;
@@ -95,6 +95,29 @@
       font: 0.82rem/1.5 "Avenir Next", "Segoe UI", sans-serif;
     }
 
+    #initial-actions {
+      position: relative;
+      min-height: 9.5rem;
+    }
+
+    #accept,
+    #decline {
+      position: absolute;
+    }
+
+    #accept {
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    #decline {
+      top: 4.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: left 180ms ease, top 180ms ease;
+    }
+
     .actions {
       display: flex;
       flex-wrap: wrap;
@@ -147,159 +170,6 @@
       margin: 1.2rem 0 0;
       color: var(--muted);
       font-size: 0.98rem;
-    }
-
-    .auth-tabs {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      margin: 0 auto 1.25rem;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .auth-tab {
-      min-height: 2.75rem;
-      padding: 0.6rem 1rem;
-      border: 0;
-      border-bottom: 2px solid transparent;
-      border-radius: 0;
-      background: transparent;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .auth-tab[aria-selected="true"] {
-      border-bottom-color: var(--rose);
-      color: var(--rose);
-    }
-
-    .auth-form {
-      display: grid;
-      gap: 0.9rem;
-      max-width: 420px;
-      margin: 0 auto;
-      text-align: left;
-    }
-
-    .auth-form label {
-      display: grid;
-      gap: 0.4rem;
-      color: var(--ink);
-      font: 0.9rem/1.35 "Avenir Next", "Segoe UI", sans-serif;
-    }
-
-    .auth-form input {
-      width: 100%;
-      min-height: 3rem;
-      padding: 0.65rem 0.75rem;
-      border: 1px solid #79515e;
-      border-radius: 4px;
-      background: #211a20;
-      color: var(--ink);
-      font: 1rem "Avenir Next", "Segoe UI", sans-serif;
-    }
-
-    .auth-form button {
-      margin-top: 0.35rem;
-    }
-
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.55;
-      transform: none;
-    }
-
-    .account-tools {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem 0.9rem;
-      margin-top: 1rem;
-      color: var(--muted);
-      font: 0.86rem/1.4 "Avenir Next", "Segoe UI", sans-serif;
-    }
-
-    .account-tools p {
-      margin: 0;
-      overflow-wrap: anywhere;
-    }
-
-    .account-tools button {
-      min-height: 2.5rem;
-      padding: 0.5rem 0.85rem;
-      font-size: 0.85rem;
-    }
-
-    .admin-screen {
-      text-align: center;
-    }
-
-    .admin-screen h1 {
-      margin-bottom: 0.75rem;
-    }
-
-    .activity-section {
-      margin-top: 2.5rem;
-      padding-top: 1.4rem;
-      border-top: 1px solid var(--line);
-      text-align: left;
-    }
-
-    .activity-heading {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-    }
-
-    .activity-heading h2 {
-      margin: 0;
-      color: var(--rose);
-      font-size: 1.45rem;
-      font-weight: 400;
-    }
-
-    .activity-heading button {
-      min-height: 2.5rem;
-      padding: 0.5rem 0.85rem;
-      font-size: 0.85rem;
-    }
-
-    .activity-status {
-      min-height: 1.5em;
-      margin: 0.8rem 0;
-      color: var(--muted);
-      font: 0.84rem/1.4 "Avenir Next", "Segoe UI", sans-serif;
-    }
-
-    .activity-list {
-      max-height: min(48vh, 28rem);
-      margin: 0;
-      padding: 0;
-      overflow: auto;
-      list-style: none;
-    }
-
-    .activity-list li {
-      display: grid;
-      grid-template-columns: minmax(9rem, 1fr) minmax(9rem, 1.1fr) minmax(8rem, 1fr);
-      gap: 0.75rem;
-      padding: 0.75rem 0;
-      border-top: 1px solid rgb(98 64 75 / 45%);
-      color: var(--ink);
-      font: 0.8rem/1.45 "Avenir Next", "Segoe UI", sans-serif;
-      overflow-wrap: anywhere;
-    }
-
-    .activity-list time,
-    .activity-user {
-      color: var(--muted);
-    }
-
-    .retry-actions {
-      margin-top: 1rem;
     }
 
     .letter {
@@ -439,10 +309,6 @@
         width: 100%;
       }
 
-      .activity-list li {
-        grid-template-columns: 1fr;
-        gap: 0.2rem;
-      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -459,58 +325,25 @@
 </head>
 <body>
   <main class="app">
-  <section id="auth-screen" class="screen gate" aria-labelledby="auth-title">
-    <span class="heart-mark" aria-hidden="true">♥</span>
-    <p id="auth-eyebrow" class="eyebrow">A note for Bree</p>
-    <h1 id="auth-title">Sign in to continue</h1>
-    <p id="auth-description" class="sub">Sign in to read your note.</p>
-
-    <div id="auth-tabs" class="auth-tabs" role="tablist" aria-label="Account access">
-      <button id="signin-tab" class="auth-tab" type="button" role="tab" aria-controls="auth-form" aria-selected="true">Sign in</button>
-      <button id="signup-tab" class="auth-tab" type="button" role="tab" aria-controls="auth-form" aria-selected="false">Create account</button>
-    </div>
-    <form id="auth-form" class="auth-form" aria-labelledby="signin-tab">
-      <label for="auth-email">Email address
-        <input id="auth-email" name="email" type="email" autocomplete="email" required>
-      </label>
-      <label for="auth-password">Password
-        <input id="auth-password" name="password" type="password" autocomplete="current-password" minlength="8" required>
-      </label>
-      <button id="auth-submit" class="primary" type="submit">Sign in</button>
-    </form>
-    <p id="auth-status" class="status" role="status" aria-live="polite"></p>
-    <div id="auth-account-tools" class="account-tools" hidden>
-      <button id="auth-signout" class="secondary" type="button">Sign out</button>
-    </div>
-  </section>
-
   <section id="gate" class="screen gate" aria-labelledby="gate-title">
     <span class="heart-mark" aria-hidden="true">♥</span>
-    <p class="eyebrow">A note for Bree</p>
-    <h1 id="gate-title">There’s something I’d like you to read.</h1>
-    <p class="sub">Would you be open to reading a note from me?</p>
-    <p class="privacy-note">Your choices and key actions are recorded for the administrator.</p>
+    <p class="eyebrow">A note for Britney</p>
+    <h1 id="gate-title">Britney, do you love me?</h1>
+    <p class="sub">Choose yes or no.</p>
+    <p class="privacy-note">No account needed. Choices and key actions are recorded with a temporary anonymous ID.</p>
 
     <div id="initial-actions" class="actions">
-      <button id="accept" class="primary" type="button" data-activity="consent_accepted">Yes, I’ll read it</button>
-      <button id="decline" class="secondary" type="button" data-activity="consent_declined">No, not right now</button>
+      <button id="accept" class="primary" type="button" data-activity="consent_accepted">Yes</button>
+      <button id="decline" class="secondary" type="button" data-activity="consent_declined">No</button>
     </div>
     <p id="gate-status" class="status" role="status" aria-live="polite"></p>
-    <div class="account-tools">
-      <p id="user-identity"></p>
-      <button id="user-signout" class="secondary" type="button">Sign out</button>
-    </div>
-    <div id="retry-actions" class="actions retry-actions" hidden>
-      <button id="retry" class="primary" type="button" data-activity="retry_clicked">Try again</button>
-      <button id="not-now" class="secondary" type="button" data-activity="not_now_clicked">Not now</button>
-    </div>
   </section>
 
   <section id="letter-screen" class="screen" aria-labelledby="letter-heading" hidden>
     <article class="letter">
       <span class="letter-mark" aria-hidden="true">♥</span>
       <h1 id="letter-heading" tabindex="-1">A letter for you</h1>
-      <p class="to">Bree,</p>
+      <p class="to">Britney,</p>
       <p>I want to apologize for how I handled things after you reached out. I took my time, and I know the waiting and the distance were not easy for you.</p>
       <p>What happened hurt me deeply, and I still needed space to think. But I heard your apology, and I know how hard it was to write. I don't want us to leave things on a cold note.</p>
       <p>I've had time to think since I wrote my reply. I'd like us to talk, honestly and calmly, with no pressure on either side.</p>
@@ -532,75 +365,44 @@
       </form>
       <p id="calendar-status" class="calendar-status" role="status" aria-live="polite"></p>
     </section>
-    <div class="account-tools">
-      <p id="letter-identity"></p>
-      <button id="letter-signout" class="secondary" type="button">Sign out</button>
-    </div>
-  </section>
-
-  <section id="admin-screen" class="screen admin-screen" aria-labelledby="admin-title" hidden>
-    <span class="heart-mark" aria-hidden="true">♥</span>
-    <p class="eyebrow">Private access</p>
-    <h1 id="admin-title">Admin area</h1>
-    <p id="admin-identity" class="sub"></p>
-    <p class="sub">This account has administrator access.</p>
-    <button id="admin-signout" class="secondary" type="button">Sign out</button>
-    <section class="activity-section" aria-labelledby="activity-heading">
-      <div class="activity-heading">
-        <h2 id="activity-heading">Recent activity</h2>
-        <button id="refresh-activity" class="secondary" type="button" data-activity="activity_refresh_clicked">Refresh</button>
-      </div>
-      <p id="activity-status" class="activity-status" role="status" aria-live="polite"></p>
-      <ol id="activity-list" class="activity-list"></ol>
-    </section>
   </section>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>
-    const authScreen = document.querySelector("#auth-screen");
-    const authTabs = document.querySelector("#auth-tabs");
-    const authForm = document.querySelector("#auth-form");
-    const authTitle = document.querySelector("#auth-title");
-    const authEyebrow = document.querySelector("#auth-eyebrow");
-    const authDescription = document.querySelector("#auth-description");
-    const authEmail = document.querySelector("#auth-email");
-    const authPassword = document.querySelector("#auth-password");
-    const authSubmit = document.querySelector("#auth-submit");
-    const authStatus = document.querySelector("#auth-status");
-    const authAccountTools = document.querySelector("#auth-account-tools");
     const gate = document.querySelector("#gate");
     const letterScreen = document.querySelector("#letter-screen");
-    const adminScreen = document.querySelector("#admin-screen");
     const initialActions = document.querySelector("#initial-actions");
-    const retryActions = document.querySelector("#retry-actions");
     const gateStatus = document.querySelector("#gate-status");
     const notificationEndpoint = "";
     const supabaseUrl = "https://zpbmoghnpykbnitxeuju.supabase.co";
     const supabasePublishableKey = "sb_publishable_jg4uzeb1EP1bRpseSiYC7g_EZPvtxYc";
-    let isAdminRoute = window.location.hash === "#admin";
-    let authMode = "signin";
-    let supabaseClient = null;
-    let currentUserId = null;
     const callForm = document.querySelector("#call-form");
     const callDate = document.querySelector("#call-date");
     const callTime = document.querySelector("#call-time");
     const calendarStatus = document.querySelector("#calendar-status");
-    const activityStatus = document.querySelector("#activity-status");
-    const activityList = document.querySelector("#activity-list");
 
     const activityLabels = {
       consent_accepted: "Accepted the note",
       consent_declined: "Declined the note",
-      retry_clicked: "Chose try again",
-      not_now_clicked: "Chose not now",
       calendar_add_clicked: "Clicked add to calendar",
       calendar_reminder_created: "Created a calendar reminder",
-      activity_refresh_clicked: "Refreshed activity records",
-      signed_in: "Signed in",
-      account_created: "Created an account",
-      signed_out: "Signed out"
     };
+
+    function createVisitorId() {
+      if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (character) => {
+        const value = Math.random() * 16 | 0;
+        return (character === "x" ? value : (value & 3 | 8)).toString(16);
+      });
+    }
+
+    let visitorId;
+    try {
+      visitorId = sessionStorage.getItem("bree-visitor-id") || createVisitorId();
+      sessionStorage.setItem("bree-visitor-id", visitorId);
+    } catch {
+      visitorId = createVisitorId();
+    }
 
     async function notifyResponse(response) {
       if (!notificationEndpoint) {
@@ -620,29 +422,19 @@
       }
     }
 
-    async function activityRequest(method, body) {
-      const { data, error } = await supabaseClient.auth.getSession();
-      if (error || !data.session) throw new Error("Sign in to access activity.");
-
-      const response = await fetch(`${supabaseUrl}/functions/v1/activity`, {
-        method,
-        headers: {
-          apikey: supabasePublishableKey,
-          Authorization: `Bearer ${data.session.access_token}`,
-          ...(body ? { "Content-Type": "application/json" } : {})
-        },
-        ...(body ? { body: JSON.stringify(body) } : {})
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || "Activity request failed.");
-      return result;
-    }
-
     async function recordActivity(action) {
-      if (!supabaseClient || !currentUserId || !activityLabels[action]) return;
+      if (!activityLabels[action]) return;
 
       try {
-        await activityRequest("POST", { event: action });
+        const response = await fetch(`${supabaseUrl}/functions/v1/activity`, {
+          method: "POST",
+          headers: {
+            apikey: supabasePublishableKey,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ event: action, visitor_id: visitorId })
+        });
+        if (!response.ok) throw new Error(`Activity endpoint returned ${response.status}`);
       } catch (error) {
         console.error("Could not record activity.", error);
       }
@@ -654,206 +446,6 @@
       if (control) void recordActivity(control.dataset.activity);
     });
 
-    async function loadActivity() {
-      activityStatus.textContent = "Loading activity...";
-      activityList.replaceChildren();
-
-      let events;
-      try {
-        ({ events } = await activityRequest("GET"));
-      } catch (error) {
-        console.error("Could not load activity.", error);
-        activityStatus.textContent = "Could not load activity. Check the Supabase setup.";
-        return;
-      }
-
-      activityStatus.textContent = events.length ? `${events.length} recent actions` : "No activity recorded yet.";
-      for (const entry of events) {
-        const item = document.createElement("li");
-        const time = document.createElement("time");
-        const action = document.createElement("span");
-        const user = document.createElement("span");
-
-        time.dateTime = entry.created_at;
-        time.textContent = new Intl.DateTimeFormat(undefined, {
-          dateStyle: "medium",
-          timeStyle: "short"
-        }).format(new Date(entry.created_at));
-        action.textContent = activityLabels[entry.event] || "Recorded activity";
-        user.className = "activity-user";
-        user.textContent = `User ${entry.user_id.slice(0, 8)}`;
-        user.title = entry.user_id;
-        item.append(time, action, user);
-        activityList.append(item);
-      }
-    }
-
-    function setAuthMode(mode) {
-      authMode = isAdminRoute ? "signin" : mode;
-      const signingUp = authMode === "signup";
-      const signinTab = document.querySelector("#signin-tab");
-      const signupTab = document.querySelector("#signup-tab");
-
-      signinTab.setAttribute("aria-selected", String(!signingUp));
-      signupTab.setAttribute("aria-selected", String(signingUp));
-      authTabs.hidden = isAdminRoute;
-      authTitle.textContent = isAdminRoute
-        ? "Admin sign in"
-        : signingUp ? "Create your account" : "Sign in to continue";
-      authEyebrow.textContent = isAdminRoute ? "Private access" : "A note for Bree";
-      authDescription.textContent = isAdminRoute
-        ? "Sign in with an approved administrator account."
-        : signingUp ? "Create an account to continue." : "Sign in to read your note.";
-      authForm.setAttribute("aria-labelledby", isAdminRoute ? "auth-title" : `${authMode}-tab`);
-      authSubmit.textContent = signingUp ? "Create account" : "Sign in";
-      authPassword.autocomplete = signingUp ? "new-password" : "current-password";
-    }
-
-    function showAuth(message = "") {
-      authScreen.hidden = false;
-      gate.hidden = true;
-      letterScreen.hidden = true;
-      adminScreen.hidden = true;
-      authAccountTools.hidden = true;
-      authStatus.textContent = message;
-    }
-
-    async function showSession(session) {
-      currentUserId = session.user.id;
-      authScreen.hidden = true;
-      gate.hidden = true;
-      letterScreen.hidden = true;
-      adminScreen.hidden = true;
-
-      if (isAdminRoute) {
-        const { data, error } = await supabaseClient
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", session.user.id)
-          .maybeSingle();
-
-        if (error || data?.role !== "admin") {
-          showAuth(error ? "Admin access could not be verified." : "This account does not have admin access.");
-          authAccountTools.hidden = false;
-          return;
-        }
-
-        document.querySelector("#admin-identity").textContent = `Signed in as ${session.user.email}.`;
-        adminScreen.hidden = false;
-        await loadActivity();
-        return;
-      }
-
-      document.querySelector("#user-identity").textContent = `Signed in as ${session.user.email}.`;
-      document.querySelector("#letter-identity").textContent = `Signed in as ${session.user.email}.`;
-      gate.hidden = false;
-    }
-
-    async function initializeAuth() {
-      setAuthMode("signin");
-
-      if (!supabaseUrl || !supabasePublishableKey) {
-        authSubmit.disabled = true;
-        showAuth("Account sign-in is not configured yet. Please try again later.");
-        return;
-      }
-
-      if (!window.supabase?.createClient) {
-        authSubmit.disabled = true;
-        showAuth("The sign-in service could not be loaded. Please try again later.");
-        return;
-      }
-
-      supabaseClient = window.supabase.createClient(supabaseUrl, supabasePublishableKey);
-      const { data, error } = await supabaseClient.auth.getSession();
-      if (error) {
-        showAuth("Your session could not be checked. Please sign in again.");
-      } else if (data.session) {
-        await showSession(data.session);
-      } else {
-        showAuth();
-      }
-    }
-
-    window.addEventListener("hashchange", async () => {
-      isAdminRoute = window.location.hash === "#admin";
-      setAuthMode("signin");
-
-      if (!supabaseClient) {
-        authSubmit.disabled = true;
-        showAuth("Account sign-in is not configured yet. Please try again later.");
-        return;
-      }
-
-      const { data, error } = await supabaseClient.auth.getSession();
-      if (error) {
-        showAuth("Your session could not be checked. Please sign in again.");
-      } else if (data.session) {
-        await showSession(data.session);
-      } else {
-        showAuth();
-      }
-    });
-
-    async function signOut() {
-      if (!supabaseClient) return;
-      await recordActivity("signed_out");
-      const { error } = await supabaseClient.auth.signOut();
-      if (error) {
-        authStatus.textContent = "Sign out failed. Please try again.";
-        return;
-      }
-      currentUserId = null;
-      showAuth("You are signed out.");
-    }
-
-    document.querySelector("#signin-tab").addEventListener("click", () => setAuthMode("signin"));
-    document.querySelector("#signup-tab").addEventListener("click", () => setAuthMode("signup"));
-
-    authForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      if (!supabaseClient) return;
-
-      authSubmit.disabled = true;
-      authStatus.textContent = authMode === "signup" ? "Creating your account..." : "Signing in...";
-      const credentials = {
-        email: authEmail.value.trim(),
-        password: authPassword.value
-      };
-
-      try {
-        if (authMode === "signup") {
-          const { data, error } = await supabaseClient.auth.signUp(credentials);
-          if (error) throw error;
-          if (data.session) {
-            await showSession(data.session);
-          } else {
-            authStatus.textContent = "Account created. Check your email to confirm, then sign in.";
-            setAuthMode("signin");
-          }
-        } else {
-          const { data, error } = await supabaseClient.auth.signInWithPassword(credentials);
-          if (error) throw error;
-          await showSession(data.session);
-          await recordActivity("signed_in");
-          await recordActivity("signed_in");
-        }
-      } catch (error) {
-        authStatus.textContent = error.message || "Sign-in failed. Please try again.";
-      } finally {
-        authSubmit.disabled = false;
-      }
-    });
-
-    document.querySelector("#auth-signout").addEventListener("click", signOut);
-    document.querySelector("#user-signout").addEventListener("click", signOut);
-    document.querySelector("#letter-signout").addEventListener("click", signOut);
-    document.querySelector("#admin-signout").addEventListener("click", signOut);
-    document.querySelector("#refresh-activity").addEventListener("click", async () => {
-      await recordActivity("activity_refresh_clicked");
-      await loadActivity();
-    });
-
     function localDateValue(date) {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -862,6 +454,32 @@
     }
 
     callDate.min = localDateValue(new Date());
+
+    function moveNoButton() {
+      const stageRect = initialActions.getBoundingClientRect();
+      const buttonRect = document.querySelector("#decline").getBoundingClientRect();
+      const yesRect = document.querySelector("#accept").getBoundingClientRect();
+      const button = document.querySelector("#decline");
+      const maxX = Math.max(0, stageRect.width - buttonRect.width);
+      const maxY = Math.max(0, initialActions.clientHeight - buttonRect.height);
+      let left = maxX / 2;
+      let top = maxY;
+
+      for (let attempt = 0; attempt < 12; attempt += 1) {
+        left = Math.random() * maxX;
+        top = Math.random() * maxY;
+        const overlapsYes = left < yesRect.right - stageRect.left + 8
+          && left + buttonRect.width > yesRect.left - stageRect.left - 8
+          && top < yesRect.bottom - stageRect.top + 8
+          && top + buttonRect.height > yesRect.top - stageRect.top - 8;
+        if (!overlapsYes) break;
+      }
+
+      button.style.transform = "none";
+      button.style.left = `${left}px`;
+      button.style.top = `${top}px`;
+      gateStatus.textContent = "No is getting away. Try again?";
+    }
 
     document.querySelector("#accept").addEventListener("click", () => {
       void notifyResponse("accepted");
@@ -872,22 +490,7 @@
 
     document.querySelector("#decline").addEventListener("click", () => {
       void notifyResponse("declined");
-      initialActions.hidden = true;
-      retryActions.hidden = false;
-      gateStatus.textContent = "No pressure. You can try again, or leave it here.";
-      document.querySelector("#retry").focus();
-    });
-
-    document.querySelector("#retry").addEventListener("click", () => {
-      retryActions.hidden = true;
-      initialActions.hidden = false;
-      gateStatus.textContent = "Whenever you’re ready.";
-      document.querySelector("#accept").focus();
-    });
-
-    document.querySelector("#not-now").addEventListener("click", () => {
-      retryActions.hidden = true;
-      gateStatus.textContent = "Of course. The note will stay closed.";
+      moveNoButton();
     });
 
     function pad(value) {
@@ -943,7 +546,7 @@
       void recordActivity("calendar_reminder_created");
     });
 
-    initializeAuth();
+    gate.hidden = false;
   </script>
 </body>
 </html>
